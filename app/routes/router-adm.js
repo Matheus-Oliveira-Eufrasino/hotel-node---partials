@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const { validationResult } = require('express-validator');
+const { validacaoCadCliente } = require('../helpers/validacoes');
 
 
 router.get("/", (req, res)=>{
@@ -11,7 +13,24 @@ router.get("/adm-cliente", (req, res)=>{
 })
 
 router.get("/adm-cliente-novo", (req, res)=>{
-    res.render("pages/adm-cliente-novo");
+    res.render("pages/adm-cliente-novo", { errors: [], formData: {} });
+})
+
+router.post("/adm-cliente-novo", validacaoCadCliente, (req, res)=>{
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).render("pages/adm-cliente-novo", {
+            errors: errors.array(),
+            formData: req.body
+        });
+    }
+
+    res.render("pages/adm-cliente-novo", {
+        errors: [],
+        formData: req.body,
+        sucesso: "Cliente validado com sucesso!"
+    });
 })
 
 router.get("/adm-cliente-edit", (req, res)=>{

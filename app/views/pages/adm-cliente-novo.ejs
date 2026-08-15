@@ -18,7 +18,24 @@
     <div class="container body-content">
         <h2>Novo cliente</h2>
 
-        <form action="" method="post">
+        <% const errorsList = errors || []; const data = formData || {}; %>
+
+        <% if (errorsList.length > 0) { %>
+            <div class="alert alert-danger">
+                <strong>Corrija os campos abaixo:</strong>
+                <ul>
+                    <% errorsList.forEach(error => { %>
+                        <li><%= error.msg %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        <% } %>
+
+        <% if (typeof sucesso !== "undefined" && sucesso) { %>
+            <div class="alert alert-success"><%= sucesso %></div>
+        <% } %>
+
+        <form action="/adm/adm-cliente-novo" method="post">
 
               <%- include("../partials/form-cliente") -%>
         </form>
